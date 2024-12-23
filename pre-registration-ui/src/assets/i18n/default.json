@@ -29,6 +29,11 @@
       "name": "Kannada",
       "nativeName": "ಕನ್ನಡ",
       "locale": "kn_IN"
+    },
+    "bur": {
+      "name": "Burmese",
+      "nativeName": "မြန်မာ",
+      "locale": "my_MM"
     }
   }
 }

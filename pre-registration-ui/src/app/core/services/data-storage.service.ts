@@ -37,6 +37,7 @@ export class DataStorageService {
   PRE_REG_URL = this.appConfigService.getConfig()["PRE_REG_URL"];
 
   getI18NLanguageFiles(langCode: string) {
+    debugger
     return this.httpClient.get(`./assets/i18n/${langCode}.json`);
   }
 

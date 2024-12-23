@@ -84,7 +84,7 @@ export class AcknowledgementComponent implements OnInit, OnDestroy {
     }
 
     let notificationTypes = this.configService
-      .getConfigByKey(appConstants.CONFIG_KEYS.mosip_notification_type)
+      .getConfigByKey(appConstants.CONFIG_KEYS.mosip_notification_type|| '')
       .split("|");
     this.notificationTypes = notificationTypes.map((item) =>
       item.toUpperCase()
