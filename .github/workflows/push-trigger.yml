@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - '!release-branch'
+      - tf_myanmar
       - release*
       - master
       - 1.*
