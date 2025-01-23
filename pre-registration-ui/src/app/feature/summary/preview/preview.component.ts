@@ -99,7 +99,9 @@ export class PreviewComponent implements OnInit {
       if (this.previewData[control.id]) {
         this.controlIds.push(control.id);
         this.dataCaptureLanguages.forEach((langCode) => {
-          tempObj[langCode] = control.labelName[langCode];
+          const label = control.labelName[langCode];       
+          const substringBeforeSlash = label.split('/')[0].trim(); // Split by '/' and take the first part 
+          tempObj[langCode] = substringBeforeSlash;      
         });
 
         this.ControlIdLabelObjects[control.id] = tempObj;

@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
 
   async loadConfigs() {
     this.dataService.getConfig().subscribe((response) => {
-      //response = stubConfig;
+      response = stubConfig;
       this.configService.setConfig(response);
       this.appVersion = this.configService.getConfigByKey(
         "preregistration.ui.version"
