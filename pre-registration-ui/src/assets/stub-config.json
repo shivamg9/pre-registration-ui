@@ -18,7 +18,7 @@
         "preregistration.documentupload.allowed.file.nameLength": "50",
         "mosip.notificationtype": "SMS|EMAIL",
         "mosip.idschema.version": "0.1",
-        "mosip.optional-languages": "ara,fra,bur",
+        "mosip.optional-languages": "bur",
         "preregistration.availability.sync": "30",
         "preregistration.timespan.rebook": "0",
         "mosip.id.validation.identity.email": "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-zA-Z]{2,})$",
