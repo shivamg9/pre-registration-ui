@@ -7,6 +7,7 @@ export class ConfigService {
   configs = {};
 
   public setConfig(configJson: any) {
+    console.log('config',configJson);
     localStorage.setItem('config',JSON.stringify(configJson.response));
 
   }
