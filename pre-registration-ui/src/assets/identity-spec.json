@@ -23,7 +23,7 @@
             "required": true
           },
           {
-            "id": "fullNameBurmese",
+            "id": "fullName",
             "description": "Enter Full Name (Burmese)",
             "labelName": {
               "eng": "Full Name (Burmese) ",
