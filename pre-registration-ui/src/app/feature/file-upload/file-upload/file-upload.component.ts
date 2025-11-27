@@ -155,7 +155,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   async getIdentityJsonFormat() {
     return new Promise((resolve) => {
       this.dataStorageService.getIdentityJson().subscribe((response) => {
-        //response = identityStubJson;
+        // response = identityStubJson;
         let identityJsonSpec =
           response[appConstants.RESPONSE]["jsonSpec"]["identity"];
         this.identityData = identityJsonSpec["identity"];
@@ -612,6 +612,11 @@ export class FileUploadComponent implements OnInit, OnDestroy {
               }
               //this.LOD = res["response"].documentCategories;
               //console.log(this.LOD);
+              this.LOD.sort((a, b) => {
+                const indexA = this.uiFields.findIndex(field => field.subType === a.code);
+                const indexB = this.uiFields.findIndex(field => field.subType === b.code);
+                return indexA - indexB;
+              });
               this.enableBrowseButtonList = new Array(this.LOD.length).fill(
                 false
               );
@@ -1428,6 +1433,9 @@ export class FileUploadComponent implements OnInit, OnDestroy {
    * @memberof FileUploadComponent
    */
   async onNext() {
+    console.log("onNext called, readOnlyMode:", this.readOnlyMode);
+    console.log("userForm.valid:", this.userForm.valid);
+    console.log("userForm:", this.userForm);
     if (this.readOnlyMode) {
       localStorage.setItem("modifyDocument", "false");
       let url = Utils.getURL(this.router.url, "summary");
@@ -1441,42 +1449,54 @@ export class FileUploadComponent implements OnInit, OnDestroy {
           this.userForm.controls[`${controlId}`].markAsTouched();
         }
       });
+      console.log("After marking touched, userForm.valid:", this.userForm.valid);
       if (this.userForm.valid) {
-        await this.updateApplicationStatus(appConstants.APPLICATION_STATUS_CODES.incomplete, 
-          appConstants.APPLICATION_STATUS_CODES.pending);
+        console.log("Form is valid, processing to update status");
+        // await this.updateApplicationStatus(appConstants.APPLICATION_STATUS_CODES.incomplete, 
+        //   appConstants.APPLICATION_STATUS_CODES.pending);
         localStorage.setItem("modifyDocument", "false");
         let url = Utils.getURL(this.router.url, "summary");
         this.router.navigateByUrl(url + `/${this.preRegId}/preview`);
+      } else {
+        console.log("Form is invalid, cannot proceed");
       }
     }
   }
 
   //eg: update the application status from "Application_Incomplete" to "Pending_Appointment"
   updateApplicationStatus = async (fromStatus: string, toStatus: string) => {
+    console.log("updateApplicationStatus called with fromStatus:", fromStatus, "toStatus:", toStatus);
     return new Promise((resolve) => {
       this.dataStorageService.getApplicationStatus(this.users[0].preRegId).subscribe(
         (response) => {
+          console.log("getApplicationStatus response:", response);
           const applicationStatus = response["response"]["statusCode"];
+          console.log("current applicationStatus:", applicationStatus);
           if (applicationStatus === fromStatus) {
             console.log(`updating application status from ${fromStatus} to ${toStatus}`);
             this.dataStorageService.updateApplicationStatus(
             this.users[0].preRegId, toStatus)
             .subscribe(
               (response) => {
+                console.log("updateApplicationStatus success:", response);
                 resolve(true);
               },
               (error) => {
-                resolve(true);      
+                console.log("updateApplicationStatus error:", error);
+                resolve(true);
               }
             );
+          } else {
+            console.log("applicationStatus does not match fromStatus, resolving");
+            resolve(true);
           }
-          resolve(true);
         },
         (error) => {
-          resolve(true);      
+          console.log("getApplicationStatus error:", error);
+          resolve(true);
         }
       );
-    });  
+    });
   }
 
   /**

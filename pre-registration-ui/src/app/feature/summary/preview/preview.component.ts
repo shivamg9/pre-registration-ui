@@ -215,7 +215,7 @@ export class PreviewComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.dataStorageService.getIdentityJson().subscribe((response) => {
         //console.log(response);
-        //response = identityStubJson;
+        response = identityStubJson;
         let identityJsonSpec = response[appConstants.RESPONSE]["jsonSpec"]["identity"];
         //console.log(jsonSpec)
         this.identityData = identityJsonSpec["identity"];
@@ -394,8 +394,13 @@ export class PreviewComponent implements OnInit {
 
   documentsMapping() {
     this.documentMapObject = [];
+    const validDocumentCodes = this.identityData
+      .filter((field) => field.controlType === 'fileupload' && field.subType)
+      .map((field) => field.subType);
+
     if (this.files && this.documentTypes.length !== 0) {
       this.documentTypes.forEach((type) => {
+        if (validDocumentCodes.includes(type.code)) {
         const file = this.files.filter((file) => file.docCatCode === type.code);
         if (
           type.code === "POA" &&
@@ -413,6 +418,7 @@ export class PreviewComponent implements OnInit {
           fileName: file.length > 0 ? file[0].docName : undefined,
         };
         this.documentMapObject.push(obj);
+      }
       });
     }
   }
@@ -558,9 +564,31 @@ export class PreviewComponent implements OnInit {
         .getLocationInfoForLocCode(locCode, langCode)
         .subscribe((response) => {
           if (response[appConstants.RESPONSE]) {
-            this.previewData[controlName][index]["label"] =
-              response[appConstants.RESPONSE]["name"];
-          }
+            const locationName = response[appConstants.RESPONSE]["name"];
+            this.previewData[controlName][index]["label"] = locationName;
+
+            // --- START FIX: Update NRC String ---
+            let nrcFieldId = "";
+
+            // 1. Handle Applicant Case (cityCode -> nrcNumber)
+            if (controlName === "cityCode") {
+              nrcFieldId = "nrcNumber";
+            } 
+            // 2. Handle Parent/Other Cases (e.g. fatherCityCode -> fatherNrcNumber)
+            else if (controlName.endsWith("CityCode")) {
+              nrcFieldId = controlName.replace("CityCode", "NrcNumber");
+            }
+
+            // 3. Perform the replacement if the target field exists
+            if (nrcFieldId && this.previewData[nrcFieldId]) {
+              this.previewData[nrcFieldId].forEach((item) => {
+                // Check language and ensure value contains the code before replacing
+                if (item.language === langCode && item.value && item.value.includes(locCode)) {
+                  item.value = item.value.replace(locCode, locationName);
+                }
+              });
+            } 
+         }
           resolve(true);
         },
         (error) => {

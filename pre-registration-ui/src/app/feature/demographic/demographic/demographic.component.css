@@ -408,3 +408,41 @@ mat-icon {
 /* ::ng-deep.mat-input-element {
   height: 20px;
 } */
+ .user__nrc-fields {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.user__nrc-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.nrc-field {
+  flex: 1;
+  min-width: 120px;
+  max-width: 150px;
+}
+
+.user__nrc-result {
+  width: 100%;
+}
+
+.nrc-result-field {
+  width: 100%;
+  background-color: #f5f5f5;
+}
+
+.nrc-result-field ::ng-deep .mat-form-field-outline {
+  color: #666;
+}
+
+.nrc-result-field ::ng-deep .mat-input-element {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+

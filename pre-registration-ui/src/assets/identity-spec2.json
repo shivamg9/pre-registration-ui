@@ -633,10 +633,10 @@
               "tam": "அடையாள சான்று"
             },
             "controlType": "fileupload",
-            "inputRequired": true,
+            "inputRequired": false,
             "validators": [],
             "subType": "POI",
-            "required": true
+            "required": false
           },
           {
             "id": "proofOfRelationship",

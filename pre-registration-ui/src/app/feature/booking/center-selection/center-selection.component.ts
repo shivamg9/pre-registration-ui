@@ -176,18 +176,25 @@ export class CenterSelectionComponent
     this.totalItems = 0;
     this.nearbyClicked = false;
     let uiFieldName = null;
+    console.log(`recommendedCenterLocCode: ${this.recommendedCenterLocCode}`);
+    console.log('identityData fields with locationHierarchyLevel:');
     this.identityData.forEach((obj) => {
       if (
         obj.inputRequired === true &&
         obj.controlType !== null &&
         !(obj.controlType === "fileupload")
       ) {
-        if (obj.locationHierarchyLevel && this.recommendedCenterLocCode == obj.locationHierarchyLevel) {
-          uiFieldName = obj.id;
+       if (obj.locationHierarchyLevel) {
+          console.log(`Field ${obj.id} has locationHierarchyLevel: ${obj.locationHierarchyLevel}`);
+          if (this.recommendedCenterLocCode == obj.locationHierarchyLevel) {
+            uiFieldName = obj.id;
+            console.log(`Found matching uiFieldName: ${uiFieldName}`);
+          }
         }
       }
     });
     if (!uiFieldName) {
+      console.log('No uiFieldName found, showing error message');
       this.showErrorMessage(null, this.errorlabels.error);
     } else {
       console.log(`uiFieldName: ${uiFieldName}`);

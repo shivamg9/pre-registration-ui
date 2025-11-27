@@ -43,7 +43,7 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import identityStubJson from "../../../../assets/identity-spec1.json";
+import identityStubJson from "../../../../assets/identity-spec.json";
 import { RouterExtService } from "src/app/shared/router/router-ext.service";
 
 /**
@@ -556,7 +556,7 @@ export class DemographicComponent
     return new Promise((resolve, reject) => {
       this.dataStorageService.getIdentityJson().subscribe(
         async (response) => {
-          //response = identityStubJson;
+          response = identityStubJson;
           //console.log(identityStubJson);
           let identityJsonSpec =
             response[appConstants.RESPONSE]["jsonSpec"]["identity"];
@@ -575,6 +575,17 @@ export class DemographicComponent
             hierarchiesArray.push(locationHeirarchiesFromJson);
             this.locationHeirarchies = hierarchiesArray;
           }
+          const mainLocationHierarchy = ["region", "District", "Township", "Sub-Township", "Quarter", "Village"];
+          const mainNrcHierarchy = ["nrcCode", "cityCode"];
+          const fatherNrcHierarchy = ["fatherNrcCode", "fatherCityCode"];
+          const motherNrcHierarchy = ["motherNrcCode", "motherCityCode"];
+          
+          // Overwrite the locationHeirarchies with the correct separated lists
+          this.locationHeirarchies = [];
+          this.locationHeirarchies.push(mainLocationHierarchy);
+          this.locationHeirarchies.push(mainNrcHierarchy);
+          this.locationHeirarchies.push(fatherNrcHierarchy);
+          this.locationHeirarchies.push(motherNrcHierarchy);
           localStorage.setItem(
             "locationHierarchy",
             JSON.stringify(this.locationHeirarchies[0])
@@ -680,8 +691,11 @@ export class DemographicComponent
       uiField.controlType !== "dropdown" &&
       uiField.controlType !== "button" &&
       uiField.controlType !== "checkbox" &&
-      uiField.controlType === "textbox" &&
-      uiField.type !== "string"
+(// Condition 1: Textbox that is NOT a string (i.e. simpleType)
+        (uiField.controlType === "textbox" && uiField.type !== "string") ||
+        // Condition 2: ALWAYS treat nrcConcat as multi-lang (Fixes your error)
+        uiField.controlType === "nrcConcat"
+      )
     ) {
       return true;
     }
@@ -893,9 +907,20 @@ export class DemographicComponent
    * and fields are shown/hidden in the UI form.
    */
   async onChangeHandler(selectedFieldId: string) {
-    //console.log("onChangeHandler " + selectedFieldId);
-    //if (!this.dataModification || (this.dataModification && this.userForm.valid) ) {
-    //populate form data in json for json-rules-engine to evalatute the conditions
+    
+    const nrcFields = ['nrcCode', 'cityCode', 'residenceStatus', 'nrcNumberPart'];
+    const fatherNrcFields = ['fatherNrcCode', 'fatherCityCode', 'fatherResidenceStatus', 'fatherNrcNumberPart'];
+    const motherNrcFields = ['motherNrcCode', 'motherCityCode', 'motherResidenceStatus', 'motherNrcNumberPart'];
+
+    if (nrcFields.includes(selectedFieldId)) {
+      this.handleNrcConcatenation('nrc');
+    }
+    if (fatherNrcFields.includes(selectedFieldId)) {
+      this.handleNrcConcatenation('father');
+    }
+    if (motherNrcFields.includes(selectedFieldId)) {
+      this.handleNrcConcatenation('mother');
+    }
     const identityFormData = this.createIdentityJSONDynamic(true);
     let isChild = false;
     let currentAge = null;
@@ -1388,6 +1413,10 @@ export class DemographicComponent
         });
         Promise.all(promisesResolved).then((values) => {
           //console.log(`done fetching locations`);
+          // this.onNrcChange('nrcNumber'); 
+          this.handleNrcConcatenation('nrc');
+          this.handleNrcConcatenation('father');
+          this.handleNrcConcatenation('mother');
           resolve(true);
         });
       }
@@ -1476,6 +1505,135 @@ export class DemographicComponent
     if (dateMomentObj.isValid()) {
       this.userForm.controls[controlId].setValue(dateMomentObj);
     } 
+  }
+
+  private getOptionLabel(fieldId: string, valueCode: string, langCode: string): string {
+    // If the value is empty, return empty string
+    if (!valueCode) return "";
+    
+    // If the dropdown data isn't loaded yet, return the raw code (e.g. "12")
+    if (!this.selectOptionsDataArray[fieldId]) return valueCode;
+
+    const options = this.selectOptionsDataArray[fieldId];
+    
+    // Find the matching option
+    const match = options.find(
+      (option) => option.valueCode === valueCode && option.languageCode === langCode
+    );
+
+    // Return the translated label if found, otherwise return the raw code
+    return match ? match.valueName : valueCode;
+  }
+  // New helper function to manually transliterate 6-digit NRC part (0-9) to Burmese digits (၀-၉)
+  transliterateDigits(input: string, toLangCode: string): string {
+    if (!input || toLangCode === 'eng') {
+      return input;
+    }
+    
+    // Static mapping for digits 0-9 to Burmese glyphs
+    const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const burmeseDigits = ['၀', '၁', '၂', '၃', '၄', '၅', '၆', '၇', '၈', '၉'];
+
+    if (toLangCode === 'bur') {
+      let output = input;
+      for (let i = 0; i < englishDigits.length; i++) {
+        const regex = new RegExp(englishDigits[i], 'g');
+        output = output.replace(regex, burmeseDigits[i]);
+      }
+      return output;
+    }
+
+    return input;
+  }
+  handleNrcConcatenation(fieldPrefix: string) {
+    // Determine the base field names based on the prefix
+    const nrcCodeField = fieldPrefix === 'nrc' ? 'nrcCode' : `${fieldPrefix}NrcCode`;
+    const cityCodeField = fieldPrefix === 'nrc' ? 'cityCode' : `${fieldPrefix}CityCode`;
+    const residenceStatusField = fieldPrefix === 'nrc' ? 'residenceStatus' : `${fieldPrefix}ResidenceStatus`;
+    const nrcNumberPartField = fieldPrefix === 'nrc' ? 'nrcNumberPart' : `${fieldPrefix}NrcNumberPart`;
+    const nrcNumberResultField = fieldPrefix === 'nrc' ? 'nrcNumber' : `${fieldPrefix}NrcNumber`;
+    
+    this.dataCaptureLanguages.forEach((langCode) => {
+      
+      // --- 1. GET RAW CODE VALUES (FIX: Removed optional chaining) ---
+      const nrcCodeCtrl = this.userForm.get(nrcCodeField);
+      const nrcCodeVal = nrcCodeCtrl ? nrcCodeCtrl.value : '';
+
+      const cityCodeCtrl = this.userForm.get(cityCodeField);
+      const cityCodeVal = cityCodeCtrl ? cityCodeCtrl.value : '';
+
+      const resStatusCtrl = this.userForm.get(residenceStatusField);
+      const resStatusVal = resStatusCtrl ? resStatusCtrl.value : ''; // e.g., '(C)'
+
+      const nrcNumPartCtrl = this.userForm.get(nrcNumberPartField);
+      let nrcNumPart = nrcNumPartCtrl ? nrcNumPartCtrl.value : ''; // e.g., '123456'
+      
+      // --- 2. GET LABELS (NRC Code and City Code) ---
+      const nrcLabel = this.getOptionLabel(nrcCodeField, nrcCodeVal, langCode);
+      const cityLabel = this.getOptionLabel(cityCodeField, cityCodeVal, langCode);
+
+      // --- 3. RESIDENCE STATUS LOGIC (Static mapping for Burmese code) ---
+      let resStatusDisplay = '';
+      if (resStatusVal) {
+        // Static map of English Code to Burmese Code
+        const statusMap = {
+            '(C)': '(နိုင်)',
+            '(N)': '(ပြု)',
+            '(A)': '(ဧည့်)'
+        };
+        
+        if (langCode === 'bur') {
+            // Display Burmese code: Map English stored value -> Burmese code
+            resStatusDisplay = statusMap[resStatusVal] || resStatusVal;
+        } else if (langCode === 'eng') {
+            // FIX: If the English field value is incorrectly stored as a Burmese code (e.g., '(နိုင်)'),
+            // reverse map it back to the English code (e.g., '(C)') for display.
+            const reverseMap = {};
+            for (const key in statusMap) {
+                if (statusMap.hasOwnProperty(key)) {
+                    reverseMap[statusMap[key]] = key;
+                }
+            }
+            // Attempt to reverse map the stored value. If it's not a known Burmese code, use it as-is.
+            resStatusDisplay = reverseMap[resStatusVal] || resStatusVal;
+        } else {
+             // For all other languages, use the stored code directly
+            resStatusDisplay = resStatusVal;
+        }
+      }
+
+      // --- 4. APPLY DIGIT TRANSLITERATION ---
+      if (nrcNumPart && langCode === 'bur') {
+        nrcNumPart = this.transliterateDigits(nrcNumPart, 'bur');
+      }
+      
+      // --- 5. CONCATENATE ---
+      let fullNrc = '';
+      
+      // NRC Format: [RegionCode]/[CityCode]([StatusChar])[6Digits]
+      if (nrcLabel) {
+        fullNrc += nrcLabel;
+      }
+      
+      if (cityLabel) {
+        fullNrc +=  cityLabel;
+      }
+      
+      if (resStatusDisplay) {
+        fullNrc +=   resStatusDisplay;
+      }
+      
+      if (nrcNumPart) {
+        fullNrc += nrcNumPart;
+      }
+
+      // --- 6. SET VALUE ---
+      const targetCtrlName = nrcNumberResultField + '_' + langCode;
+      if (this.userForm.controls[targetCtrlName]) {
+        this.userForm.controls[targetCtrlName].setValue(fullNrc);
+        this.userForm.controls[targetCtrlName].markAsTouched(); 
+      }
+    });
   }
 
   /**
@@ -1616,7 +1774,7 @@ export class DemographicComponent
             codeValue = {
               valueCode: element.code,
               valueName: element.value,
-              languageCode: langCode,
+              languageCode: langCode || element.langCode,
             };
           }
           this.selectOptionsDataArray[field].push(codeValue);
@@ -1944,7 +2102,7 @@ export class DemographicComponent
           identityObj[field.id] = "";
           newIdentityObj[field.id] = "";
         } else {
-          if (field.type === "simpleType") {
+          if (field.type === "simpleType" || field.controlType === "nrcConcat") {
             identityObj[field.id] = [];
           } else if (field.type === "string") {
             identityObj[field.id] = "";

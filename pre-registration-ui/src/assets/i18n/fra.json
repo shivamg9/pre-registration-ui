@@ -791,6 +791,7 @@
     "PRG_BOOK_RCI_008": "Heure de la date de réservation non sélectionnée",
     "PRG_BOOK_RCI_015": "Aucun emplacement disponible trouvé pour le centre d'enregistrement spécifié",
     "PRG_BOOK_RCI_013": "Données de réservation non trouvées",
+    "PRG_BOOK_RCI_016": "Table de disponibilité non accessible",
     "PRG_BOOK_RCI_017": "Table de disponibilité non accessible",
     "PRG_BOOK_RCI_018": "Votre rendez-vous ne peut pas être annulé. Veuillez supprimer votre demande et en créer une nouvelle.",
     "PRG_BOOK_RCI_020": "Données de base non trouvées",

@@ -803,6 +803,7 @@
     "PRG_BOOK_RCI_008": "Booking date time not selected",
     "PRG_BOOK_RCI_015": "No available slots found for specified registration center",
     "PRG_BOOK_RCI_013": "Booking data not found",
+    "PRG_BOOK_RCI_016": "Availablity table not accessible",
     "PRG_BOOK_RCI_017": "Availablity table not accessible",
     "PRG_BOOK_RCI_018": "Your appointment cannot be cancelled. Please discard your application and create a new one.",
     "PRG_BOOK_RCI_020": "Master data not found",

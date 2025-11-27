@@ -4,7 +4,7 @@
   "responsetime": "2021-05-03T05:59:22.377318",
   "response": {
     "id": "ea99be7d-7d45-4a07-8a45-45ec2f73ab6a",
-    "version": 0.6,
+    "version": 0.8,
     "title": "UI Specification for Pre-Registration",
     "description": "Pre-registration UI Specification for Demographic Data capture",
     "identitySchemaId": "18ad2b1d-d09e-4ef2-8c8f-623107933dd9",
@@ -23,63 +23,192 @@
             "required": true
           },
           {
-            "id": "fullName",
-            "description": "Enter Full Name",
+            "id": "fullNameBurmese",
+            "description": "Enter Full Name (Burmese)",
             "labelName": {
-              "eng": "Full Name",
+              "eng": "Full Name (Burmese) ",
               "ara": "الاسم الكامل",
-              "fra": "Nom complet"
+              "fra": "Nom complet",
+              "bur": "အမည်အပြည့်အစုံ (မြန်မာ)"
             },
             "controlType": "textbox",
             "inputRequired": true,
             "fieldType": "default",
             "type": "simpleType",
+            "validators": [],
+            "required": true
+          },
+          {
+            "id": "nrcCode",
+            "description": "NRC Code",
+            "labelName": {
+              "eng": "NRC Code",
+              "ara": "رمز المدينة",
+              "fra": "Code de ville",
+              "bur": "နိုင်ငံသားမှတ်ပုံတင် ကုဒ်"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "default",
+            "subType": "nrcCode",
+            "type": "simpleType",
+            "validators": [],
+            "parentLocCode": "MMR",
+            "locationHierarchyLevel": 1,
+            "transliteration": true,
+            "required": true
+          },
+          {
+            "id": "cityCode",
+            "description": "City Code / NRC Prefix",
+            "labelName": {
+              "eng": "City Code",
+              "ara": "رمز المدينة",
+              "fra": "Code de ville",
+              "bur": "မြို့နယ်ကုဒ်"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "simpleType",
+            "validators": [],
+            "required": true,
+            "transliteration": true,
+            "locationHierarchyLevel": 2
+          },
+          {
+            "id": "residenceStatus",
+            "description": "Citizen Type",
+            "labelName": {
+              "eng": "Citizen Type",
+              "ara": "نوع المواطن",
+              "fra": "Type de citoyen",
+              "bur": "နိုင်ငံသားအမျိုးအစား"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "dynamic",
+            "type": "simpleType",
+            "validators": [],
+            "transliteration": true,
+            "required": true
+          },
+          {
+            "id": "nrcNumberPart",
+            "description": "NRC Number Digits",
+            "labelName": {
+              "eng": "NRC Digits",
+              "ara": "أرقام NRC",
+              "fra": "Chiffres NRC",
+              "bur": "မှတ်ပုံတင်နံပါတ် (ဂဏန်း)"
+            },
+            "controlType": "textbox",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "string",
             "validators": [
               {
-                "langCode": "eng",
                 "type": "regex",
-                "validator": "[a-zA-Z ]+$",
-                "arguments": [],
-                "errorMessageCode": "UI_1000"
-              },
-              {
-                "langCode": "eng",
-                "type": "regex",
-                "validator": "^(?=.{3,50}$).*",
-                "arguments": [],
-                "errorMessageCode": "UI_1001"
-              },
-              {
-                "langCode": "ara",
-                "type": "regex",
-                "validator": "[گچپژیلفقهمو ء-ي]+$",
-                "arguments": [],
-                "errorMessageCode": "UI_1000"
-              },
-              {
-                "langCode": "ara",
-                "type": "regex",
-                "validator": "^(?=.{3,50}$).*",
-                "arguments": [],
-                "errorMessageCode": "UI_1001"
-              },
-              {
-                "langCode": "fra",
-                "type": "regex",
-                "validator": "[a-zA-ZÀ-ÿ-. ]+$",
-                "arguments": [],
-                "errorMessageCode": "UI_1000"
-              },
-              {
-                "langCode": "fra",
-                "type": "regex",
-                "validator": "^(?=.{3,50}$).*",
-                "arguments": [],
-                "errorMessageCode": "UI_1001"
+                "validator": "^[0-9]{6}$",
+                "arguments": []
               }
             ],
+            "transliteration": true,
+            "required": true
+          },
+          {
+            "id": "nrcNumber",
+            "description": "Full NRC Number (Concatenated)",
+            "labelName": {
+              "eng": "NRC Number",
+              "ara": "رقم NRC",
+              "fra": "Numéro NRC",
+              "bur": "မှတ်ပုံတင်နံပါတ်"
+            },
+            "controlType": "nrcConcat",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "string",
+            "validators": [],
             "required": true,
-            "transliteration": true
+            "transliteration": true,
+            "readOnly": true
+          },
+          {
+            "id": "fullNameEnglish",
+            "description": "Enter Full Name (English)",
+            "labelName": {
+              "eng": "Full Name (English) ",
+              "ara": "الاسم الكامل",
+              "fra": "Nom complet",
+              "bur": "အမည်အပြည့်အစုံ (အင်္ဂလိပ်)"
+            },
+            "controlType": "textbox",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "simpleType",
+            "validators": [],
+            "required": true
+          },
+          {
+            "id": "phone",
+            "description": "phone",
+            "labelName": {
+              "eng": "Phone",
+              "ara": "هاتف",
+              "fra": "Téléphone",
+              "bur": "ဖုန်းနံပါတ်"
+            },
+            "controlType": "textbox",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "string",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^([6-9]{1})([0-9]{9})$",
+                "arguments": []
+              }
+            ],
+            "required": false
+          },
+          {
+            "id": "email",
+            "description": "email",
+            "labelName": {
+              "eng": "Email",
+              "ara": "البريد الإلكتروني",
+              "fra": "Email",
+              "bur": "အီးမေးလ်"
+            },
+            "controlType": "textbox",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "string",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-zA-Z]{2,})$",
+                "arguments": []
+              }
+            ],
+            "required": false
+          },
+          {
+            "id": "gender",
+            "description": "Enter Gender",
+            "labelName": {
+              "eng": "Gender",
+              "ara": "جنس",
+              "fra": "Genre",
+              "bur": "ကျား/မ"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "dynamic",
+            "type": "simpleType",
+            "validators": [],
+            "required": true
           },
           {
             "id": "dateOfBirth",
@@ -87,7 +216,8 @@
             "labelName": {
               "eng": "Date Of Birth",
               "ara": "تاريخ الولادة",
-              "fra": "Date de naissance"
+              "fra": "Date de naissance",
+              "bur": "မွေးသက္ကရာဇ်"
             },
             "controlType": "ageDate",
             "inputRequired": true,
@@ -97,46 +227,90 @@
             "required": true
           },
           {
-            "id": "gender",
-            "description": "Enter Gender",
+            "id": "placeOfBirth",
+            "description": "placeOfBirth",
             "labelName": {
-              "eng": "Gender",
-              "ara": "جنس",
-              "fra": "Le genre"
-            },
-            "controlType": "dropdown",
-            "inputRequired": true,
-            "fieldType": "dynamic",
-            "type": "simpleType",
-            "validators": [],
-            "required": true
-          },
-          {
-            "id": "residenceStatus",
-            "description": "Residence status",
-            "labelName": {
-              "eng": "Residence Status",
-              "ara": "حالة الإقامة",
-              "fra": "Statut de résidence"
-            },
-            "controlType": "dropdown",
-            "inputRequired": true,
-            "fieldType": "dynamic",
-            "type": "simpleType",
-            "validators": [],
-            "required": true
-          },
-          {
-            "id": "addressLine1",
-            "description": "addressLine1",
-            "labelName": {
-              "eng": "Address Line1",
-              "ara": "العنوان السطر 1",
-              "fra": "Adresse 1"
+              "eng": "Place of Birth",
+              "ara": "مكان الميلاد",
+              "fra": "Lieu de naissance",
+              "bur": "မွေးဖွားရာဇာတိ"
             },
             "controlType": "textbox",
             "inputRequired": true,
             "fieldType": "default",
+            "type": "simpleType",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^(?=.{0,100}$).*",
+                "arguments": []
+              }
+            ],
+            "required": false,
+            "transliteration": true
+          },
+          {
+            "id": "bloodType",
+            "description": "bloodGroup",
+            "labelName": {
+              "eng": "Blood Group",
+              "ara": "فصيلة الدم",
+              "fra": "Groupe sanguin",
+              "bur": "သွေးအမျိုးအစား"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "dynamic",
+            "subType": "bloodType",
+            "type": "simpleType",
+            "validators": [],
+            "required": false,
+            "transliteration": true
+          },
+          {
+            "id": "occupation",
+            "description": "occupation",
+            "labelName": {
+              "eng": "Occupation",
+              "ara": "مهنة",
+              "fra": "Occupation",
+              "bur": "အလုပ်အကိုင်"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "dynamic",
+            "type": "simpleType",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^(?=.{0,50}$).*",
+                "arguments": []
+              }
+            ],
+            "required": true,
+            "requiredOn": [
+              {
+                "engine": "MVEL",
+                "expr": " identity.get('age') >= 18 "
+              }
+            ],
+            "subType": "occupation",
+            "exceptionPhotoRequired": false,
+            "transliteration": true
+          },
+          {
+            "id": "ethnicity",
+            "description": "ethnicity",
+            "labelName": {
+              "eng": "Ethnicity",
+              "ara": "عرق",
+              "fra": "Ethnicité",
+              "bur": "လူမျိုး"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "dynamic",
+            "subType": "race",
             "type": "simpleType",
             "validators": [
               {
@@ -149,12 +323,31 @@
             "transliteration": true
           },
           {
-            "id": "addressLine2",
-            "description": "addressLine2",
+            "id": "religion",
+            "description": "religion",
             "labelName": {
-              "eng": "Address Line2",
-              "ara": "العنوان السطر 2",
-              "fra": "Adresse 2"
+              "eng": "Religion",
+              "ara": "دين",
+              "fra": "Religion",
+              "bur": "ကိုးကွယ်သည့်ဘာသာ"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "dynamic",
+            "subType": "religion",
+            "type": "simpleType",
+            "validators": [],
+            "required": true,
+            "transliteration": true
+          },
+          {
+            "id": "addressLine1",
+            "description": "addressLine1",
+            "labelName": {
+              "eng": "Address Line 1",
+              "ara": "العنوان السطر 1",
+              "fra": "Adresse Ligne 1",
+              "bur": "လိပ်စာ ၁"
             },
             "controlType": "textbox",
             "inputRequired": true,
@@ -167,36 +360,17 @@
                 "arguments": []
               }
             ],
-            "transliteration": true,
             "required": false,
-            "visibleCondition": {
-              "all": [
-                {
-                  "fact": "identity",
-                  "operator": "equal",
-                  "value": "MLE",
-                  "path": "$.gender.0.value"
-                }
-              ]
-            },
-            "requiredCondition": {
-              "all": [
-                {
-                  "fact": "identity",
-                  "operator": "equal",
-                  "value": "MLE",
-                  "path": "$.gender.0.value"
-                }
-              ]
-            }
+            "transliteration": true
           },
           {
-            "id": "addressLine3",
-            "description": "addressLine3",
+            "id": "addressLine2",
+            "description": "addressLine2",
             "labelName": {
-              "eng": "Address Line3",
-              "ara": "العنوان السطر 3",
-              "fra": "Adresse 3"
+              "eng": "Address Line 2",
+              "ara": "العنوان السطر 2",
+              "fra": "Adresse Ligne 2",
+              "bur": "လိပ်စာ ၂"
             },
             "controlType": "textbox",
             "inputRequired": true,
@@ -214,11 +388,12 @@
           },
           {
             "id": "region",
-            "description": "region",
+            "description": "State/Region",
             "labelName": {
-              "eng": "Region",
-              "ara": "منطقة",
-              "fra": "Région"
+              "eng": "State/Region",
+              "ara": "الولاية / المنطقة",
+              "fra": "État / Région",
+              "bur": "တိုင်းဒေသကြီး/ပြည်နယ်"
             },
             "controlType": "dropdown",
             "inputRequired": true,
@@ -231,17 +406,18 @@
                 "arguments": []
               }
             ],
-            "parentLocCode": "MOR",
-				    "locationHierarchyLevel": 1,
+            "parentLocCode": "COU",
+            "locationHierarchyLevel": 1,
             "required": true
           },
           {
-            "id": "province",
-            "description": "province",
+            "id": "District",
+            "description": "District",
             "labelName": {
-              "eng": "Province",
-              "ara": "المحافظة",
-              "fra": "Province"
+              "eng": "District",
+              "ara": "حي",
+              "fra": "District",
+              "bur": "ခရိုင်"
             },
             "controlType": "dropdown",
             "inputRequired": true,
@@ -254,16 +430,17 @@
                 "arguments": []
               }
             ],
-            "locationHierarchyLevel": 2,
+            "locationHierarchyLevel": 6,
             "required": true
           },
           {
-            "id": "city",
-            "description": "city",
+            "id": "Township",
+            "description": "Township",
             "labelName": {
-              "eng": "City",
-              "ara": "مدينة",
-              "fra": "Ville"
+              "eng": "Township",
+              "ara": "البلدة",
+              "fra": "Canton",
+              "bur": "မြို့နယ်"
             },
             "controlType": "dropdown",
             "inputRequired": true,
@@ -276,180 +453,427 @@
                 "arguments": []
               }
             ],
-            "locationHierarchyLevel": 3,
+            "locationHierarchyLevel": 7,
             "required": true
           },
           {
-            "id": "zone",
-            "description": "zone",
+            "id": "Sub-Township",
+            "description": "Sub-Township",
             "labelName": {
-              "eng": "Zone",
-              "ara": "منطقة",
-              "fra": "Zone"
+              "eng": "Sub-Township",
+              "ara": "البلدة الفرعية",
+              "fra": "Sous-canton",
+              "bur": "မြို့နယ်ခွဲ"
             },
             "controlType": "dropdown",
             "inputRequired": true,
             "fieldType": "default",
             "type": "simpleType",
             "validators": [],
-            "locationHierarchyLevel": 4,
+            "locationHierarchyLevel": 8,
             "required": true
           },
           {
-            "id": "postalCode",
-            "description": "postalCode",
+            "id": "Quarter",
+            "description": "Quarter",
             "labelName": {
-              "eng": "Postal Code",
-              "ara": "الكود البريدى",
-              "fra": "code postal"
+              "eng": "Quarter",
+              "ara": "ربع",
+              "fra": "Quartier",
+              "bur": "ရပ်ကွက်"
             },
             "controlType": "dropdown",
             "inputRequired": true,
             "fieldType": "default",
-            "type": "string",
-            "validators": [
-              {
-                "type": "regex",
-                "validator": "^[(?i)A-Z0-9]{5}$|^NA$",
-                "arguments": []
-              }
-            ],
-            "locationHierarchyLevel": 5,
-            "required": true
-          },
-          {
-            "id": "phone",
-            "description": "phone",
-            "labelName": {
-              "eng": "Phone",
-              "ara": "هاتف",
-              "fra": "Téléphone"
-            },
-            "controlType": "textbox",
-            "inputRequired": true,
-            "fieldType": "default",
-            "type": "string",
-            "validators": [
-              {
-                "type": "regex",
-                "validator": "^([6-9]{1})([0-9]{9})$",
-                "arguments": []
-              }
-            ],
-            "required": true
-          },
-          {
-            "id": "email",
-            "description": "email",
-            "labelName": {
-              "eng": "Email",
-              "ara": "البريد الإلكتروني",
-              "fra": "Email"
-            },
-            "controlType": "textbox",
-            "inputRequired": true,
-            "fieldType": "default",
-            "type": "string",
-            "validators": [
-              {
-                "type": "regex",
-                "validator": "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-zA-Z]{2,})$",
-                "arguments": []
-              }
-            ],
-            "required": true
-          },
-          {
-            "id": "proofOfAddress",
-            "description": "proofOfAddress",
-            "labelName": {
-              "ara": "إثبات العنوان",
-              "fra": "Address Proof",
-              "eng": "Address Proof"
-            },
-            "controlType": "fileupload",
-            "inputRequired": true,
+            "type": "simpleType",
             "validators": [],
-            "subType": "POA",
+            "locationHierarchyLevel": 9,
+            "required": true
+          },
+          {
+            "id": "Village",
+            "description": "Village",
+            "labelName": {
+              "eng": "Village",
+              "ara": "قرية",
+              "fra": "Village",
+              "bur": "ခရိုင်"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "simpleType",
+            "validators": [],
+            "locationHierarchyLevel": 10,
             "required": false
           },
           {
-            "id": "proofOfIdentity",
-            "description": "proofOfIdentity",
+            "id": "fathersName",
+            "description": "Father's Name",
             "labelName": {
-              "ara": "إثبات الهوية",
-              "fra": "Identity Proof",
-              "eng": "Identity Proof"
+              "eng": "Father's Name",
+              "ara": "اسم الأب",
+              "fra": "Nom du père",
+              "bur": "အဖအမည်"
             },
-            "controlType": "fileupload",
+            "controlType": "textbox",
             "inputRequired": true,
-            "validators": [],
-            "subType": "POI",
-            "required": true
+            "fieldType": "default",
+            "type": "simpleType",
+            "alignmentGroup": "fatherDetails",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^(?=.{0,100}$).*",
+                "arguments": []
+              }
+            ],
+            "required": true,
+            "transliteration": true
           },
           {
-            "id": "proofOfRelationship",
-            "description": "proofOfRelationship",
+            "id": "fatherNrcCode",
+            "description": "Father's NRC Code",
             "labelName": {
-              "ara": "إثبات العلاقة",
-              "fra": "Relationship Proof",
-              "eng": "Relationship Proof"
+              "eng": "Father's NRC Code",
+              "ara": "رمز المدينة (الأب)",
+              "fra": "Code ville (Père)",
+              "bur": "အဖ၏ နိုင်ငံသားမှတ်ပုံတင်ကတ် ကုဒ်"
             },
-            "controlType": "fileupload",
+            "controlType": "dropdown",
             "inputRequired": true,
+            "fieldType": "default",
+            "subType": "nrcCode",
+            "type": "simpleType",
+            "alignmentGroup": "fatherDetails",
             "validators": [],
-            "subType": "POR",
-            "required": true
+            "parentLocCode": "MMR",
+            "locationHierarchyLevel": 1,
+            "transliteration": true,
+            "required": false
           },
           {
-            "id": "proofOfDateOfBirth",
-            "description": "proofOfDateOfBirth",
+            "id": "fatherCityCode",
+            "description": "Father's City Code",
             "labelName": {
-              "ara": "دليل DOB",
-              "fra": "DOB Proof",
-              "eng": "DOB Proof"
+              "eng": "Father's City Code",
+              "ara": "رمز المدينة (الأب)",
+              "fra": "Code ville (Père)",
+              "bur": "အဖ မြို့နယ်ကုဒ်"
             },
-            "controlType": "fileupload",
+            "controlType": "dropdown",
             "inputRequired": true,
+            "fieldType": "default",
+            "type": "simpleType",
+            "alignmentGroup": "fatherDetails",
             "validators": [],
-            "subType": "POB",
-            "required": true
+            "required": false,
+            "transliteration": true,
+            "locationHierarchyLevel": 2
           },
           {
-            "id": "proofOfException",
-            "description": "proofOfException",
+            "id": "fatherResidenceStatus",
+            "description": "Father's Citizen Type",
             "labelName": {
-              "ara": "إثبات الاستثناء",
-              "fra": "Exception Proof",
-              "eng": "Exception Proof"
+              "eng": "Father's Citizen Type",
+              "ara": "نوع المواطن (الأب)",
+              "fra": "Type de citoyen (Père)",
+              "bur": "အဖ နိုင်ငံသားအမျိုးအစား"
             },
-            "controlType": "fileupload",
+            "controlType": "dropdown",
             "inputRequired": true,
+            "fieldType": "dynamic",
+            "subType": "residenceStatus",
+            "type": "simpleType",
+            "alignmentGroup": "fatherDetails",
             "validators": [],
-            "subType": "POE",
-            "required": true
+            "transliteration": true,
+            "required": false
           },
           {
-            "id": "proofOfException-1",
-            "description": "proofOfException",
+            "id": "fatherNrcNumberPart",
+            "description": "Father's NRC Digits",
             "labelName": {
-              "ara": "إثبات الاستثناء 2",
-              "fra": "Exception Proof",
-              "eng": "Exception Proof"
+              "eng": "Father's NRC Digits",
+              "ara": "أرقام NRC (الأب)",
+              "fra": "Chiffres NRC (Père)",
+              "bur": "အဖ မှတ်ပုံတင်နံပါတ် (ဂဏန်း)"
+            },
+            "controlType": "textbox",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "string",
+            "alignmentGroup": "fatherDetails",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^[0-9]{6}$",
+                "arguments": []
+              }
+            ],
+            "transliteration": true,
+            "required": false
+          },
+          {
+            "id": "fatherNrcNumber",
+            "description": "Father's Full NRC",
+            "labelName": {
+              "eng": "Father's NRC Number",
+              "ara": "رقم NRC (الأب)",
+              "fra": "Numéro NRC (Père)",
+              "bur": "အဖ မှတ်ပုံတင်နံပါတ်"
+            },
+            "controlType": "nrcConcat",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "string",
+            "alignmentGroup": "fatherDetails",
+            "validators": [],
+            "required": false,
+            "transliteration": true,
+            "readOnly": true
+          },
+          {
+            "id": "mothersName",
+            "description": "Mother's Name",
+            "labelName": {
+              "eng": "Mother's Name",
+              "ara": "اسم الأم",
+              "fra": "Nom de la mère",
+              "bur": "အမိအမည်"
+            },
+            "controlType": "textbox",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "simpleType",
+            "alignmentGroup": "mothersDetails",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^(?=.{0,100}$).*",
+                "arguments": []
+              }
+            ],
+            "required": true,
+            "transliteration": true
+          },
+          {
+            "id": "motherNrcCode",
+            "description": "Mother's NRC Code",
+            "labelName": {
+              "eng": "Mother's NRC Code",
+              "ara": "رمز المدينة (الأم)",
+              "fra": "Code ville (Mère)",
+              "bur": "အမေ၏ နိုင်ငံသားမှတ်ပုံတင်ကတ် ကုဒ်"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "default",
+            "subType": "nrcCode",
+            "type": "simpleType",
+            "alignmentGroup": "mothersDetails",
+            "validators": [],
+            "parentLocCode": "MMR",
+            "locationHierarchyLevel": 1,
+            "transliteration": true,
+            "required": false
+          },
+          {
+            "id": "motherCityCode",
+            "description": "Mother's City Code",
+            "labelName": {
+              "eng": "Mother's City Code",
+              "ara": "رمز المدينة (الأم)",
+              "fra": "Code ville (Mère)",
+              "bur": "အမိ မြို့နယ်ကုဒ်"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "simpleType",
+            "alignmentGroup": "mothersDetails",
+            "validators": [],
+            "required": false,
+            "transliteration": true,
+            "locationHierarchyLevel": 2
+          },
+          {
+            "id": "motherResidenceStatus",
+            "description": "Mother's Citizen Type",
+            "labelName": {
+              "eng": "Mother's Citizen Type",
+              "ara": "نوع المواطن (الأم)",
+              "fra": "Type de citoyen (Mère)",
+              "bur": "အမိ နိုင်ငံသားအမျိုးအစား"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "dynamic",
+            "subType": "residenceStatus",
+            "type": "simpleType",
+            "alignmentGroup": "mothersDetails",
+            "validators": [],
+            "transliteration": true,
+            "required": false
+          },
+          {
+            "id": "motherNrcNumberPart",
+            "description": "Mother's NRC Digits",
+            "labelName": {
+              "eng": "Mother's NRC Digits",
+              "ara": "أرقام NRC (الأم)",
+              "fra": "Chiffres NRC (Mère)",
+              "bur": "အမိ မှတ်ပုံတင်နံပါတ် (ဂဏန်း)"
+            },
+            "controlType": "textbox",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "string",
+            "alignmentGroup": "mothersDetails",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^[0-9]{6}$",
+                "arguments": []
+              }
+            ],
+            "transliteration": true,
+            "required": false
+          },
+          {
+            "id": "motherNrcNumber",
+            "description": "Mother's Full NRC",
+            "labelName": {
+              "eng": "Mother's NRC Number",
+              "ara": "رقم NRC (الأم)",
+              "fra": "Numéro NRC (Mère)",
+              "bur": "အမိ မှတ်ပုံတင်နံပါတ်"
+            },
+            "controlType": "nrcConcat",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "string",
+            "alignmentGroup": "mothersDetails",
+            "validators": [],
+            "required": false,
+            "transliteration": true,
+            "readOnly": true
+          },
+          {
+            "id": "occupationOfHeadOfHousehold",
+            "description": "Occupation of Head of Household",
+            "labelName": {
+              "eng": "Occupation of Head of Household",
+              "ara": "مهنة رب الأسرة",
+              "fra": "Occupation du chef de ménage",
+              "bur": "အိမ်ထောင်ဦးစီး၏အလုပ်အကိုင်"
+            },
+            "controlType": "textbox",
+            "inputRequired": true,
+            "fieldType": "default",
+            "type": "simpleType",
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^(?=.{0,100}$).*",
+                "arguments": []
+              }
+            ],
+            "required": false,
+            "transliteration": true
+          },
+          {
+            "id": "remarkstype",
+            "description": "Remark Type",
+            "labelName": {
+              "eng": "Remark Type",
+              "ara": "نوع الملاحظة",
+              "fra": "Type de remarque",
+              "bur": "မှတ်ချက်အမျိုးအစား"
+            },
+            "controlType": "dropdown",
+            "inputRequired": true,
+            "fieldType": "dynamic",
+            "subType": "remarkstype",
+            "type": "simpleType",
+            "validators": [],
+            "transliteration": true,
+            "required": false
+          },
+          {
+            "id": "nrcCardFront",
+            "description": "NRC Card - Front Side",
+            "labelName": {
+              "eng": "NRC Card - Front Side",
+              "ara": "الوجه الأمامي لبطاقة NRC",
+              "fra": "Carte NRC - Face avant",
+              "bur": "NRC ကတ် - ရှေ့ဘက်ခြမ်း"
             },
             "controlType": "fileupload",
             "inputRequired": true,
             "validators": [],
-            "subType": "POE",
-            "required": true
+            "subType": "NRCF",
+            "required": false
+          },
+          {
+            "id": "nrcCardBack",
+            "description": "NRC Card - Back Side",
+            "labelName": {
+              "eng": "NRC Card - Back Side",
+              "ara": "الوجه الخلفي لبطاقة NRC",
+              "fra": "Carte NRC - Face arrière",
+              "bur": "NRC ကတ် - နောက်ကျောဘက်"
+            },
+            "controlType": "fileupload",
+            "inputRequired": true,
+            "validators": [],
+            "subType": "NRCB",
+            "required": false
+          },
+          {
+            "id": "householdDocFront",
+            "description": "Household Document - Front Side",
+            "labelName": {
+              "eng": "Household Document - Front Side",
+              "ara": "الوجه الأمامي لوثيقة الأسرة",
+              "fra": "Document de ménage - Face avant",
+              "bur": "အိမ်ထောင်စုစာရွက်စာတမ်း - ရှေ့ဘက်ခြမ်း"
+            },
+            "controlType": "fileupload",
+            "inputRequired": true,
+            "validators": [],
+            "subType": "HHDF",
+            "required": false
+          },
+          {
+            "id": "householdDocBack",
+            "description": "Household Document - Back Side",
+            "labelName": {
+              "eng": "Household Document - Back Side",
+              "ara": "الوجه الخلفي لوثيقة الأسرة",
+              "fra": "Document de ménage - Face arrière",
+              "bur": "အိမ်ထောင်စုစာရွက်စာတမ်း - နောက်ကျောဘက်"
+            },
+            "controlType": "fileupload",
+            "inputRequired": true,
+            "validators": [],
+            "subType": "HHDB",
+            "required": false
           }
         ],
         "locationHierarchy": [
           "region",
-          "province",
-          "city",
-          "zone",
-          "postalCode"
+          "District",
+          "Township",
+          "Sub-Township",
+          "Quarter",
+          "Village",
+          "nrcCode",
+          "cityCode",
+          "fatherNrcCode",
+          "fatherCityCode",
+          "motherNrcCode",
+          "motherCityCode"
         ]
       }
     },

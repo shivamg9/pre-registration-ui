@@ -237,6 +237,17 @@
                           </div>
                         </span>
                       </ng-container>
+                      <ng-container *ngIf="field.controlType === 'nrcConcat'">
+                      <mat-form-field appearance="legacy" class="nrc-result-field">
+                        <mat-label>{{field.labelName[dataCaptureLanguage]}}</mat-label>
+                        <input 
+                          matInput 
+                          [formControlName]="field.id + '_' + dataCaptureLanguage" 
+                          readonly
+                          [disabled]="readOnlyMode"
+                        />
+                      </mat-form-field>
+                    </ng-container>
                       <!-- Date fields-->
                       <ng-container *ngIf="field.controlType === 'date'">
                         <span *ngIf="i == 0" [dir]="dataCaptureLangsDir[i]">
