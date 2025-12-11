@@ -2102,9 +2102,9 @@ export class DemographicComponent
           identityObj[field.id] = "";
           newIdentityObj[field.id] = "";
         } else {
-          if (field.type === "simpleType" || field.controlType === "nrcConcat") {
+          if (field.type === "simpleType") {
             identityObj[field.id] = [];
-          } else if (field.type === "string") {
+          } else if (field.type === "string" || field.controlType === "nrcConcat") {
             identityObj[field.id] = "";
           }
         }
