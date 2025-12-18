@@ -556,7 +556,7 @@ export class DemographicComponent
     return new Promise((resolve, reject) => {
       this.dataStorageService.getIdentityJson().subscribe(
         async (response) => {
-          response = identityStubJson;
+          //response = identityStubJson;
           //console.log(identityStubJson);
           let identityJsonSpec =
             response[appConstants.RESPONSE]["jsonSpec"]["identity"];
