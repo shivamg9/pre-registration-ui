@@ -621,7 +621,36 @@ export class TimeSelectionComponent
             });
         } 
       },
-      (error) => {
+      async (error) => {
+         const errorCode = Utils.getErrorCode(error);
+        if (errorCode === 'PRG_PAM_DOC_005') {
+           const data = {
+            case: "MESSAGE",
+            title: this.languagelabels.title_success,
+            message: this.languagelabels.msg_success,
+          };
+          this.dialog
+            .open(DialougComponent, {
+              width: "400px",
+              data: data,
+            })
+            .afterClosed()
+            await this.updateApplicationStatus();
+            this.bookingService.setSendNotification(true);
+            this.spinner = false;
+            this.disableContinueButton = false;
+            const url = Utils.getURL(this.router.url, "summary", 3);
+            if (this.router.url.includes("multiappointment")) {
+              this.router.navigateByUrl(
+                url + `/multiappointment/acknowledgement`
+              );
+            } else {
+              this.router.navigateByUrl(
+                url + `/${this.preRegId[0]}/acknowledgement`
+              );
+            }
+            return;
+          }
         if (Utils.getErrorCode(error) === appConstants.ERROR_CODES.timeExpired) {
           let timespan = Utils.getErrorMessage(error).match(/\d+/g);
           let errorMessage =
@@ -779,5 +808,22 @@ export class TimeSelectionComponent
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  updateApplicationStatus = async () => {
+    return new Promise((resolve) => {
+      this.preRegId.forEach(async (prid: any, index) => {
+        this.dataService.updateApplicationStatus(
+          prid, appConstants.APPLICATION_STATUS_CODES.booked)
+          .subscribe(
+            (response) => {
+              resolve(true);
+            },
+            (error) => {
+              resolve(true);
+            }
+          );
+      });
+    });
   }
 }

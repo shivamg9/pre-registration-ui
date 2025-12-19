@@ -35,7 +35,13 @@
             "inputRequired": true,
             "fieldType": "default",
             "type": "simpleType",
-            "validators": [],
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^[A-Za-z\\u1000-\\u109F\\s'-]{2,256}$",
+                "arguments": []
+              }
+            ],
             "required": true
           },
           {
@@ -147,7 +153,13 @@
             "inputRequired": true,
             "fieldType": "default",
             "type": "simpleType",
-            "validators": [],
+            "validators": [
+              {
+                "type": "regex",
+                "validator": "^[A-Za-z\\u1000-\\u109F\\s'-]{2,256}$",
+                "arguments": []
+              }
+            ],
             "required": true
           },
           {
@@ -356,7 +368,7 @@
             "validators": [
               {
                 "type": "regex",
-                "validator": "^(?=.{0,50}$).*",
+                "validator": "^(?=.{3,50}$).*",
                 "arguments": []
               }
             ],
@@ -379,7 +391,7 @@
             "validators": [
               {
                 "type": "regex",
-                "validator": "^(?=.{0,50}$).*",
+                "validator": "^(?=.{3,50}$).*",
                 "arguments": []
               }
             ],

@@ -556,7 +556,7 @@ export class DemographicComponent
     return new Promise((resolve, reject) => {
       this.dataStorageService.getIdentityJson().subscribe(
         async (response) => {
-          response = identityStubJson;
+          // response = identityStubJson;
           //console.log(identityStubJson);
           let identityJsonSpec =
             response[appConstants.RESPONSE]["jsonSpec"]["identity"];
@@ -2094,6 +2094,7 @@ export class DemographicComponent
     const identityObj = {};
     const newIdentityObj = {};
     this.identityData.forEach((field) => {
+      debugger;
       if (
         field.inputRequired === true &&
         !(field.controlType === "fileupload")
@@ -2102,9 +2103,9 @@ export class DemographicComponent
           identityObj[field.id] = "";
           newIdentityObj[field.id] = "";
         } else {
-          if (field.type === "simpleType" || field.controlType === "nrcConcat") {
+          if (field.type === "simpleType") {
             identityObj[field.id] = [];
-          } else if (field.type === "string") {
+          } else if (field.type === "string"|| field.controlType === "nrcConcat" ) {
             identityObj[field.id] = "";
           }
         }
