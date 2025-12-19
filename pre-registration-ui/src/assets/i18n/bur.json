@@ -494,7 +494,7 @@
     },
      "error": {
        "error": "အတွင်းပိုင်းဆာဗာတွင် အမှားအယွင်းရှိနေပါသည်။ ခဏအကြာတွင် ထပ်မံကြိုးစားပါ။",
-      "button_ok": "OK"
+      "button_ok": "အိုကေ"
      },
      "dataCaptureLanguage": {
       "title": "ဘာသာစကား ရွေးပါ",
@@ -568,12 +568,12 @@
     "text_mobile": "မိုဘိုင်းဖုန်းနံပါတ် ထည့်ပါ",
     "invalidApplicantNumber":"မမှန်ကန်သော မိုဘိုင်းဖုန်းနံပါတ်",
     "invalidApplicantEmailId":"မမှန်ကန်သော အီးမေးလ် ID",
-    "action_ok": "OK",
+    "action_ok": "အိုကေ",
     "title_discard": "ပယ်ချရန်",
     "action_discard_app": "လျှောက်လွှာတစ်ခုလုံးကို ပယ်ချရန်",
     "action_cancel":"ချိန်းဆိုမှုကို ပယ်ဖျက်ပြီး အသေးစိတ်အချက်အလက်ကို သိမ်းရန်",
     "action_submit": "တင်သွင်းရန်",
-      "action_dismiss":"Ok",
+      "action_dismiss":"အိုကေ",
         "action_add":"ထည့်ရန်",
         "action_close":"ပိတ်ရန်",
       "action_add_to_slot":"အကွက်ထဲသို့ ထည့်ရန်",
@@ -633,7 +633,7 @@
         "\n\n အမှားကုဒ်- "
      ],
        "sessionInvalidLogout":"သင်၏ session သက်တမ်းကုန်ဆုံးသွားပါပြီ။ နောက်တစ်ကြိမ် လော့ဂ်အင်ဝင်ပါ။",
-       "button_ok":"OK",
+       "button_ok":"အိုကေ",
       "postalCode":"ထည့်သွင်းထားသော PIN သည် မမှန်ကန်ပါ။",
        "email":"ထည့်သွင်းထားသော အီးမေးလ်သည် မမှန်ကန်ပါ။",
        "phone":"ထည့်သွင်းထားသော ဖုန်းသည် မမှန်ကန်ပါ။",
