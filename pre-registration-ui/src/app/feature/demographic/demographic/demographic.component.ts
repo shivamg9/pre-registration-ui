@@ -2105,7 +2105,7 @@ export class DemographicComponent
         } else {
           if (field.type === "simpleType") {
             identityObj[field.id] = [];
-          } else if (field.type === "string"|| field.controlType === "nrcConcat" ) {
+          } else if (field.type === "string") {
             identityObj[field.id] = "";
           }
         }
