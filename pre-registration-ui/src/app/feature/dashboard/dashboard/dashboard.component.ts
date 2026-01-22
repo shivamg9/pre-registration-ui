@@ -405,55 +405,72 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @memberof DashBoardComponent
    */
   async onNewApplication() {
-     //first check if data capture languages are in session or not
-     const dataCaptureLangsFromSession = localStorage.getItem(appConstants.DATA_CAPTURE_LANGUAGES);
-     console.log(`dataCaptureLangsFromSession: ${dataCaptureLangsFromSession}`);
-     if (dataCaptureLangsFromSession) {
-      localStorage.setItem(appConstants.MODIFY_USER, "false");
-      localStorage.setItem(appConstants.NEW_APPLICANT, "true");
-      if (this.loginId) {
-        this.router.navigateByUrl(
-          `${this.userPreferredLangCode}/pre-registration/demographic/new`
-        );
-        this.isNewApplication = true;
+    const dataCaptureLangsFromSession =
+      localStorage.getItem(appConstants.DATA_CAPTURE_LANGUAGES);
+  
+    // 1. If language already exists in session → navigate directly
+    if (dataCaptureLangsFromSession) {
+      this.navigateToDemographic();
+      return;
+    }
+  
+    // 2. No session language → auto-select language (NO POPUP)
+    let selectedLangs: string[] = [];
+  
+    // Case A: mandatory languages exist
+    if (this.mandatoryLanguages.length > 0) {
+      selectedLangs =
+        this.maxLanguage === 1
+          ? [this.mandatoryLanguages[0]]
+          : Utils.reorderLangsForUserPreferredLang(
+              this.mandatoryLanguages,
+              this.userPreferredLangCode
+            );
+    }
+  
+    // Case B: no mandatory → fallback to optional
+    else if (this.optionalLanguages.length > 0) {
+      if (this.optionalLanguages.includes(this.userPreferredLangCode)) {
+        selectedLangs = [this.userPreferredLangCode];
       } else {
-        this.router.navigate(["/"]);
+        selectedLangs = [this.optionalLanguages[0]];
       }
-     } else {
-       //no data capture langs stored in session, hence prompt the user  
-      if (
-        this.maxLanguage > 1 &&
-        this.optionalLanguages.length > 0 &&
-        this.maxLanguage !== this.mandatoryLanguages.length
-      ) {
-        await this.openLangSelectionPopup();
-      } else if (this.mandatoryLanguages.length > 0) {
-        if (this.maxLanguage == 1) {
-          localStorage.setItem(appConstants.DATA_CAPTURE_LANGUAGES, JSON.stringify([this.mandatoryLanguages[0]]));
-        } else {
-          let reorderedArr = Utils.reorderLangsForUserPreferredLang(this.mandatoryLanguages, this.userPreferredLangCode);
-          localStorage.setItem(appConstants.DATA_CAPTURE_LANGUAGES, JSON.stringify(reorderedArr));
-        }
-        this.isNavigateToDemographic = true;
-      }
-      if (this.isNavigateToDemographic) {
-        let dataCaptureLanguagesLabels = Utils.getLanguageLabels(localStorage.getItem(appConstants.DATA_CAPTURE_LANGUAGES), 
-          localStorage.getItem(appConstants.LANGUAGE_CODE_VALUES));
-        localStorage.setItem(appConstants.DATA_CAPTURE_LANGUAGE_LABELS, JSON.stringify(dataCaptureLanguagesLabels));
-        localStorage.setItem(appConstants.MODIFY_USER, "false");
-        localStorage.setItem(appConstants.NEW_APPLICANT, "true");
-        if (this.loginId) {
-          this.router.navigateByUrl(
-            `${this.userPreferredLangCode}/pre-registration/demographic/new`
-          );
-          this.isNewApplication = true;
-        } else {
-          this.router.navigate(["/"]);
-        }
-      }
+    }
+  
+    // 3. Store language + navigate
+    if (selectedLangs.length > 0) {
+      localStorage.setItem(
+        appConstants.DATA_CAPTURE_LANGUAGES,
+        JSON.stringify(selectedLangs)
+      );
+  
+      const labels = Utils.getLanguageLabels(
+        JSON.stringify(selectedLangs),
+        localStorage.getItem(appConstants.LANGUAGE_CODE_VALUES)
+      );
+  
+      localStorage.setItem(
+        appConstants.DATA_CAPTURE_LANGUAGE_LABELS,
+        JSON.stringify(labels)
+      );
+  
+      this.navigateToDemographic();
     }
   }
 
+  private navigateToDemographic() {
+  localStorage.setItem(appConstants.MODIFY_USER, "false");
+  localStorage.setItem(appConstants.NEW_APPLICANT, "true");
+
+  if (this.loginId) {
+    this.router.navigateByUrl(
+      `${this.userPreferredLangCode}/pre-registration/demographic/new`
+    );
+    this.isNewApplication = true;
+  } else {
+    this.router.navigate(["/"]);
+  }
+}
   openLangSelectionPopup() {
     return new Promise((resolve) => {
       const popupAttributes = Utils.getLangSelectionPopupAttributes(this.textDir, 
