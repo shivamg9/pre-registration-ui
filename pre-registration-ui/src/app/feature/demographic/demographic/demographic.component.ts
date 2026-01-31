@@ -2400,6 +2400,13 @@ export class DemographicComponent
     let index = multiLangControls.indexOf(formControlName);
     if (index > -1) {
       let localeId = langCode.substring(0, 2);
+      if (controlName=='fullName') {
+        localeId = 'bur';
+      } else if (
+        controlName=='fullNameEnglish'
+      ) {
+        localeId = 'eng';
+      }
       JSON.parse(localStorage.getItem(appConstants.LANGUAGE_CODE_VALUES)).forEach(
         (element) => {
           if (langCode === element.code && element.locale) {
