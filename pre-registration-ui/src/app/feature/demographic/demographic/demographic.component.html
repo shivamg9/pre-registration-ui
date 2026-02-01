@@ -51,10 +51,10 @@
                               #input />
                             <i *ngIf="dataCaptureLangsDir[i] === 'ltr'"
                               style="float: right; color: grey; cursor: pointer;" matSuffix class="material-icons"
-                              (click)="openKeyboard(field.id, dataCaptureLanguage)">keyboard</i>
+                              (click)="openKeyboard(field.id + '_'+ dataCaptureLanguage,input)">keyboard</i>
                             <i *ngIf="dataCaptureLangsDir[i] === 'rtl'"
                               style="float: left; color: grey; cursor: pointer;" matSuffix class="material-icons"
-                              (click)="openKeyboard(field.id, dataCaptureLanguage)">keyboard</i>
+                              (click)="openKeyboard(field.id + '_'+ dataCaptureLanguage,input)">keyboard</i>
                           </mat-form-field>
                         </div>
                         <div *ngIf="readOnlyMode" [dir]="dataCaptureLangsDir[i]">
