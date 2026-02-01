@@ -2377,64 +2377,51 @@ export class DemographicComponent
    * @param {number} index
    * @memberof DemographicComponent
    */
-  openKeyboard(controlName: string, langCode: string) {
-    let control: AbstractControl;
-    let formControlName = controlName + "_" + langCode;
-    let multiLangControls = [];
-    let keyArr: any[] = Object.keys(this.userForm.controls);
-    keyArr.forEach((key) => {
-      this.uiFields.forEach((control) => {
-        this.dataCaptureLanguages.forEach((language, i) => {
-          if (
-            this.isControlInMultiLang(control) &&
-            !multiLangControls.includes(key)
-          ) {
-            const controlId = control.id + "_" + language;
-            if (controlId == key) {
-              multiLangControls.push(key);
-            }
-          }
-        });
-      });
-    });
-    let index = multiLangControls.indexOf(formControlName);
-    if (index > -1) {
-      let localeId = langCode.substring(0, 2);
-      if (controlName=='fullName') {
-        localeId = 'bur';
-      } else if (
-        controlName=='fullNameEnglish'
-      ) {
-        localeId = 'eng';
-      }
-      JSON.parse(localStorage.getItem(appConstants.LANGUAGE_CODE_VALUES)).forEach(
-        (element) => {
+   openKeyboard(formControlName: string, inputEl: HTMLInputElement) {
+
+    let localeId = 'en';
+  
+    const parts = formControlName.split('_');
+    const langCode = parts.length > 1 ? parts[1] : null;
+  
+    if (langCode) {
+      const langValues = JSON.parse(localStorage.getItem(appConstants.LANGUAGE_CODE_VALUES));
+      if (langValues) {
+        langValues.forEach((element) => {
           if (langCode === element.code && element.locale) {
             localeId = element.locale;
           }
-        }
-      ); 
-      if (localeId.indexOf('_') > -1) {
-        localeId = localeId.substring(0, localeId.indexOf('_'));
-      }
-      if (this.userForm.controls[formControlName]) {
-        control = this.userForm.controls[formControlName];
-      }
-      if (this.oldKeyBoardIndex == index && this.matKeyboardService.isOpened) {
-        this.matKeyboardService.dismiss();
-      } else {
-        let el: ElementRef;
-        this.oldKeyBoardIndex = index;
-        el = this._attachToElementMesOne._results[index];
-        el.nativeElement.focus();
-        this._keyboardRef = this.matKeyboardService.open(localeId);
-        this._keyboardRef.instance.setInputInstance(el);
-        this._keyboardRef.instance.attachControl(control);
+        });
       }
     }
+  
+    if (localeId.indexOf('_') > -1) {
+      localeId = localeId.substring(0, localeId.indexOf('_'));
+    }
+  
+    if (formControlName.startsWith('fullName_')) {
+      localeId = 'my';
+    }
+  
+    if (formControlName.startsWith('fullNameEnglish_')) {
+      localeId = 'en';
+    }
+  
+    const control = this.userForm.get(formControlName);
+    if (!control) return;
+  
+    inputEl.focus();
+  
+    if (this.matKeyboardService.isOpened) {
+      this.matKeyboardService.dismiss();
+    }
+  
+    this._keyboardRef = this.matKeyboardService.open(localeId);
+    this._keyboardRef.instance.setInputInstance(new ElementRef(inputEl));
+    this._keyboardRef.instance.attachControl(control);
   }
 
-  scrollUp(ele: HTMLElement) {
+    scrollUp(ele: HTMLElement) {
     ele.scrollIntoView({ behavior: "smooth" });
   }
 
