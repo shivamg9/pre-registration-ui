@@ -394,3 +394,26 @@
     width: 85%;
   }
 }
+
+/* Custom spacing for Burmese language only */
+.burmese-spacing p {
+  margin-top: 0px !important;
+  margin-bottom: 2px !important;
+  line-height: 1.2 !important;
+}
+
+/* Make the Date text slightly larger, everything else smaller */
+.burmese-spacing .time-selection__tile-date {
+  font-size: 14px !important; 
+}
+
+.burmese-spacing .time-selection__tile-date-text,
+.burmese-spacing .time-selection__tile-availability-text {
+  font-size: 12px !important;
+}
+
+/* Container padding adjustment */
+.burmese-spacing {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
