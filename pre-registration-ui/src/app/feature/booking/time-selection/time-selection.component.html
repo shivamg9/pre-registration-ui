@@ -47,7 +47,7 @@
             "
             (click)="dateSelected(i)"
           >
-            <mat-card-content class="time-selection__date">
+            <mat-card-content class="time-selection__date" [class.burmese-spacing]="userPreferredLangCode === 'bur'">
               <p class="time-selection__tile-date">{{ data.displayDate }}</p>
               <p class="time-selection__tile-date-text">
                 {{ data.displayDay }}
